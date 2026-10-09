@@ -1,0 +1,12 @@
+cat /var/log/cloud-init-output.log
+
+java -version
+mvn -version
+git --version
+
+After:
+cd /opt/order-service
+mvn clean package
+
+target/order-service-0.0.1-SNAPSHOT.jar
+java -jar target/order-service-0.0.1-SNAPSHOT.jar
