@@ -117,7 +117,20 @@ public class OrderRepository {
     }
 
     // DynamoDB -> Order
+
     private Order mapToOrder(Map<String, AttributeValue> item) {
+
+        AttributeValue totalAttribute = item.get("total");
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        if (totalAttribute != null) {
+            if (totalAttribute.s() != null) {
+                total = new BigDecimal(totalAttribute.s());
+            } else if (totalAttribute.n() != null) {
+                total = new BigDecimal(totalAttribute.n());
+            }
+        }
 
         return new Order(
                 item.get("id").s(),
@@ -126,7 +139,7 @@ public class OrderRepository {
                         : null,
                 item.get("product").s(),
                 Integer.valueOf(item.get("quantity").n()),
-                new BigDecimal(item.get("total").s()),
+                total,
                 OrderStatus.valueOf(item.get("status").s())
         );
     }
